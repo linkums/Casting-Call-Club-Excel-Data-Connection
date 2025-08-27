@@ -1,0 +1,105 @@
+<html xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/x-ms-odc; charset=utf-8">
+<meta name=ProgId content=ODC.Database>
+<meta name=SourceType content=OLEDB>
+<title>Query - getSubmissions</title>
+<xml id=docprops><o:DocumentProperties
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns="http://www.w3.org/TR/REC-html40">
+  <o:Description>Connection to the 'getSubmissions' query in the workbook.</o:Description>
+  <o:Name>Query - getSubmissions</o:Name>
+ </o:DocumentProperties>
+</xml><xml id=msodc><odc:OfficeDataConnection
+  xmlns:odc="urn:schemas-microsoft-com:office:odc"
+  xmlns="http://www.w3.org/TR/REC-html40">
+  <odc:PowerQueryConnection odc:Type="OLEDB">
+   <odc:ConnectionString>Provider=Microsoft.Mashup.OleDb.1;Data Source=$Workbook$;Location=getSubmissions;Extended Properties=&quot;&quot;</odc:ConnectionString>
+   <odc:CommandType>SQL</odc:CommandType>
+   <odc:CommandText>SELECT * FROM [getSubmissions]</odc:CommandText>
+  </odc:PowerQueryConnection>
+  <odc:PowerQueryMashupData>&lt;Mashup xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns=&quot;http://schemas.microsoft.com/DataMashup&quot;&gt;&lt;Client&gt;EXCEL&lt;/Client&gt;&lt;Version&gt;2.145.1027.0&lt;/Version&gt;&lt;MinVersion&gt;2.21.0.0&lt;/MinVersion&gt;&lt;Culture&gt;en-US&lt;/Culture&gt;&lt;SafeCombine&gt;true&lt;/SafeCombine&gt;&lt;Items&gt;&lt;Query Name=&quot;username&quot;&gt;&lt;Formula&gt;&lt;![CDATA[&quot;Your Username Here&quot; meta [IsParameterQuery=true, Type=&quot;Text&quot;, IsParameterQueryRequired=true]]]&gt;&lt;/Formula&gt;&lt;IsParameterQuery xsi:nil=&quot;true&quot; /&gt;&lt;IsDirectQuery xsi:nil=&quot;true&quot; /&gt;&lt;/Query&gt;&lt;Query Name=&quot;maxPages&quot;&gt;&lt;Formula&gt;&lt;![CDATA[5 meta [IsParameterQuery=true, Type=&quot;Any&quot;, IsParameterQueryRequired=false]]]&gt;&lt;/Formula&gt;&lt;IsParameterQuery xsi:nil=&quot;true&quot; /&gt;&lt;IsDirectQuery xsi:nil=&quot;true&quot; /&gt;&lt;/Query&gt;&lt;Query Name=&quot;fetchPage&quot;&gt;&lt;Formula&gt;&lt;![CDATA[let&#13;&#10;    Source = (username as text, pageNumber as number) =&gt; let&#13;&#10;        Source = Json.Document(Web.Contents(&quot;https://www.castingcall.club/api/v3/users/&quot; &amp; username &amp; &quot;/submissions?order_by=created_at&amp;page=&quot; &amp; Number.ToText(pageNumber))),              // step1 to build the OutputTable&#13;&#10;        submissions = Source[submissions],&#13;&#10;        #&quot;Converted to Table1&quot; = Table.FromList(submissions, Splitter.SplitByNothing(), null, null, ExtraValues.Error),&#13;&#10;        output = Table.ExpandRecordColumn(#&quot;Converted to Table1&quot;, &quot;Column1&quot;, {&quot;id&quot;, &quot;userId&quot;, &quot;permissions&quot;, &quot;roleId&quot;, &quot;roleImageUrl&quot;, &quot;roleName&quot;, &quot;projectSlug&quot;, &quot;projectName&quot;, &quot;note&quot;, &quot;kind&quot;, &quot;videoUrl&quot;, &quot;videomancyThumbnailUrl&quot;, &quot;videomancyStatus&quot;, &quot;videomancyUuid&quot;, &quot;remoteLink&quot;, &quot;createdAt&quot;, &quot;audioUrl&quot;, &quot;rawAudioUrl&quot;, &quot;commentsCount&quot;, &quot;playedCount&quot;, &quot;status&quot;, &quot;listenedByOwner&quot;, &quot;cachedVotesUp&quot;, &quot;gifts&quot;}, {&quot;id&quot;, &quot;userId&quot;, &quot;permissions&quot;, &quot;roleId&quot;, &quot;roleImageUrl&quot;, &quot;roleName&quot;, &quot;projectSlug&quot;, &quot;projectName&quot;, &quot;note&quot;, &quot;kind&quot;, &quot;videoUrl&quot;, &quot;videomancyThumbnailUrl&quot;, &quot;videomancyStatus&quot;, &quot;videomancyUuid&quot;, &quot;remoteLink&quot;, &quot;createdAt&quot;, &quot;audioUrl&quot;, &quot;rawAudioUrl&quot;, &quot;commentsCount&quot;, &quot;playedCount&quot;, &quot;status&quot;, &quot;listenedByOwner&quot;, &quot;cachedVotesUp&quot;, &quot;gifts&quot;})&#13;&#10;    in&#13;&#10;        output&#13;&#10;in&#13;&#10;    Source]]&gt;&lt;/Formula&gt;&lt;IsParameterQuery xsi:nil=&quot;true&quot; /&gt;&lt;IsDirectQuery xsi:nil=&quot;true&quot; /&gt;&lt;/Query&gt;&lt;Query Name=&quot;getSubmissions&quot;&gt;&lt;Formula&gt;&lt;![CDATA[let&#13;&#10;    getSubmissions = if username &lt;&gt; null and username &lt;&gt; &quot;Your Username Here&quot;&#13;&#10;        then&#13;&#10;            let&#13;&#10;                Source = Json.Document(Web.Contents(&quot;https://www.castingcall.club/api/v3/users/&quot; &amp; username &amp; &quot;/submissions?order_by=created_at&amp;page=1&quot;)),&#13;&#10;                totalPages = if maxPages &lt;&gt; null and maxPages &gt; 0 and maxPages &lt; Record.Field(Source[meta], &quot;totalPages&quot;) then maxPages else Record.Field(Source[meta], &quot;totalPages&quot;),&#13;&#10;                submissions = Source[submissions],&#13;&#10;                #&quot;Converted to Table&quot; = Table.FromList(submissions, Splitter.SplitByNothing(), null, null, ExtraValues.Error),&#13;&#10;                #&quot;Expanded Column1&quot; = Table.ExpandRecordColumn(#&quot;Converted to Table&quot;, &quot;Column1&quot;, {&quot;id&quot;, &quot;userId&quot;, &quot;permissions&quot;, &quot;roleId&quot;, &quot;roleImageUrl&quot;, &quot;roleName&quot;, &quot;projectSlug&quot;, &quot;projectName&quot;, &quot;note&quot;, &quot;kind&quot;, &quot;videoUrl&quot;, &quot;videomancyThumbnailUrl&quot;, &quot;videomancyStatus&quot;, &quot;videomancyUuid&quot;, &quot;remoteLink&quot;, &quot;createdAt&quot;, &quot;audioUrl&quot;, &quot;rawAudioUrl&quot;, &quot;commentsCount&quot;, &quot;playedCount&quot;, &quot;status&quot;, &quot;listenedByOwner&quot;, &quot;cachedVotesUp&quot;, &quot;gifts&quot;}, {&quot;id&quot;, &quot;userId&quot;, &quot;permissions&quot;, &quot;roleId&quot;, &quot;roleImageUrl&quot;, &quot;roleName&quot;, &quot;projectSlug&quot;, &quot;projectName&quot;, &quot;note&quot;, &quot;kind&quot;, &quot;videoUrl&quot;, &quot;videomancyThumbnailUrl&quot;, &quot;videomancyStatus&quot;, &quot;videomancyUuid&quot;, &quot;remoteLink&quot;, &quot;createdAt&quot;, &quot;audioUrl&quot;, &quot;rawAudioUrl&quot;, &quot;commentsCount&quot;, &quot;playedCount&quot;, &quot;status&quot;, &quot;listenedByOwner&quot;, &quot;cachedVotesUp&quot;, &quot;gifts&quot;}),&#13;&#10;&#13;&#10;                TablesToAppend = List.Generate(&#13;&#10;                    () =&gt; [i=1, table=#&quot;Expanded Column1&quot;],  // initialize loop variables&#13;&#10;                    each [i] &lt;= totalPages,&#13;&#10;                    each [&#13;&#10;                        i=[i]+1,&#13;&#10;                        table = fetchPage(username, i)&#13;&#10;                    ],&#13;&#10;                    each [table]&#13;&#10;                ),&#13;&#10;                // Append all tables from above List&#13;&#10;                TablesAppended = Table.Combine(List.Transform(TablesToAppend, each (_))),&#13;&#10;                #&quot;Removed Duplicates&quot; = Table.Distinct(TablesAppended, {&quot;id&quot;}),&#13;&#10;                #&quot;Changed Type&quot; = Table.TransformColumnTypes(#&quot;Removed Duplicates&quot;,{{&quot;id&quot;, Int64.Type}, {&quot;userId&quot;, Int64.Type}, {&quot;permissions&quot;, type text}, {&quot;roleId&quot;, Int64.Type}, {&quot;roleImageUrl&quot;, type text}, {&quot;roleName&quot;, type text}, {&quot;projectSlug&quot;, type text}, {&quot;projectName&quot;, type text}, {&quot;note&quot;, type text}, {&quot;kind&quot;, type text}, {&quot;videoUrl&quot;, type text}, {&quot;videomancyThumbnailUrl&quot;, type text}, {&quot;videomancyStatus&quot;, type text}, {&quot;videomancyUuid&quot;, type text}, {&quot;remoteLink&quot;, type text}, {&quot;audioUrl&quot;, type text}, {&quot;rawAudioUrl&quot;, type text}, {&quot;status&quot;, type text}, {&quot;commentsCount&quot;, Int64.Type}, {&quot;playedCount&quot;, Int64.Type}, {&quot;listenedByOwner&quot;, type logical}}),&#13;&#10;                #&quot;Expanded gifts&quot; = Table.ExpandListColumn(#&quot;Changed Type&quot;, &quot;gifts&quot;),&#13;&#10;                #&quot;Expanded gifts1&quot; = Table.ExpandRecordColumn(#&quot;Expanded gifts&quot;, &quot;gifts&quot;, {&quot;name&quot;, &quot;imageUrl&quot;, &quot;count&quot;}, {&quot;gifts.name&quot;, &quot;gifts.imageUrl&quot;, &quot;gifts.count&quot;}),&#13;&#10;                #&quot;Inserted Merged Column&quot; = Table.AddColumn(#&quot;Expanded gifts1&quot;, &quot;Merged&quot;, each Text.Combine({&quot;https://www.castingcall.club/projects/&quot;, [projectSlug]}), type text),&#13;&#10;                #&quot;Reordered Columns&quot; = Table.ReorderColumns(#&quot;Inserted Merged Column&quot;,{&quot;id&quot;, &quot;userId&quot;, &quot;permissions&quot;, &quot;roleId&quot;, &quot;roleImageUrl&quot;, &quot;roleName&quot;, &quot;projectSlug&quot;, &quot;Merged&quot;, &quot;projectName&quot;, &quot;note&quot;, &quot;kind&quot;, &quot;videoUrl&quot;, &quot;videomancyThumbnailUrl&quot;, &quot;videomancyStatus&quot;, &quot;videomancyUuid&quot;, &quot;remoteLink&quot;, &quot;createdAt&quot;, &quot;audioUrl&quot;, &quot;rawAudioUrl&quot;, &quot;commentsCount&quot;, &quot;playedCount&quot;, &quot;status&quot;, &quot;listenedByOwner&quot;, &quot;gifts.name&quot;, &quot;gifts.imageUrl&quot;, &quot;gifts.count&quot;}),&#13;&#10;                #&quot;Renamed Columns&quot; = Table.RenameColumns(#&quot;Reordered Columns&quot;,{{&quot;Merged&quot;, &quot;projectURL&quot;}}),&#13;&#10;                #&quot;Inserted Merged Column1&quot; = Table.AddColumn(#&quot;Renamed Columns&quot;, &quot;Merged&quot;, each Text.Combine({&quot;https://www.castingcall.club/submissions/&quot;, Text.From([id], &quot;en-US&quot;)}), type text),&#13;&#10;                #&quot;Removed Columns1&quot; = Table.RemoveColumns(#&quot;Inserted Merged Column1&quot;,{&quot;projectSlug&quot;, &quot;id&quot;, &quot;userId&quot;}),&#13;&#10;                #&quot;Changed Type1&quot; = Table.TransformColumnTypes(#&quot;Removed Columns1&quot;,{{&quot;createdAt&quot;, type date}}),&#13;&#10;                #&quot;Renamed Columns1&quot; = Table.RenameColumns(#&quot;Changed Type1&quot;,{{&quot;Merged&quot;, &quot;Submission URL&quot;}}),&#13;&#10;                #&quot;Reordered Columns1&quot; = Table.ReorderColumns(#&quot;Renamed Columns1&quot;,{&quot;permissions&quot;, &quot;roleId&quot;, &quot;roleImageUrl&quot;, &quot;roleName&quot;, &quot;projectURL&quot;, &quot;projectName&quot;, &quot;Submission URL&quot;, &quot;note&quot;, &quot;kind&quot;, &quot;videoUrl&quot;, &quot;videomancyThumbnailUrl&quot;, &quot;videomancyStatus&quot;, &quot;videomancyUuid&quot;, &quot;remoteLink&quot;, &quot;createdAt&quot;, &quot;audioUrl&quot;, &quot;rawAudioUrl&quot;, &quot;commentsCount&quot;, &quot;playedCount&quot;, &quot;status&quot;, &quot;listenedByOwner&quot;, &quot;gifts.name&quot;, &quot;gifts.imageUrl&quot;, &quot;gifts.count&quot;}),&#13;&#10;                #&quot;Reordered Columns2&quot; = Table.ReorderColumns(#&quot;Reordered Columns1&quot;,{&quot;permissions&quot;, &quot;roleId&quot;, &quot;roleImageUrl&quot;, &quot;roleName&quot;, &quot;projectURL&quot;, &quot;projectName&quot;, &quot;Submission URL&quot;, &quot;note&quot;, &quot;kind&quot;, &quot;videoUrl&quot;, &quot;videomancyThumbnailUrl&quot;, &quot;videomancyStatus&quot;, &quot;videomancyUuid&quot;, &quot;remoteLink&quot;, &quot;createdAt&quot;, &quot;audioUrl&quot;, &quot;rawAudioUrl&quot;, &quot;commentsCount&quot;, &quot;playedCount&quot;, &quot;status&quot;, &quot;listenedByOwner&quot;, &quot;gifts.name&quot;, &quot;gifts.imageUrl&quot;, &quot;gifts.count&quot;}),&#13;&#10;                #&quot;Reordered Columns3&quot; = Table.ReorderColumns(#&quot;Reordered Columns2&quot;,{&quot;permissions&quot;, &quot;roleId&quot;, &quot;roleImageUrl&quot;, &quot;projectName&quot;, &quot;projectURL&quot;, &quot;roleName&quot;, &quot;Submission URL&quot;, &quot;createdAt&quot;, &quot;note&quot;, &quot;kind&quot;, &quot;videoUrl&quot;, &quot;videomancyThumbnailUrl&quot;, &quot;videomancyStatus&quot;, &quot;videomancyUuid&quot;, &quot;remoteLink&quot;, &quot;audioUrl&quot;, &quot;rawAudioUrl&quot;, &quot;commentsCount&quot;, &quot;playedCount&quot;, &quot;status&quot;, &quot;gifts.name&quot;, &quot;gifts.imageUrl&quot;, &quot;gifts.count&quot;})&#13;&#10;            in&#13;&#10;                #&quot;Removed Duplicates&quot;&#13;&#10;        else Table.FromList({&quot;Please set the username parameter.&quot;}, null, {&quot;Error&quot;})&#13;&#10;in getSubmissions]]&gt;&lt;/Formula&gt;&lt;IsParameterQuery xsi:nil=&quot;true&quot; /&gt;&lt;IsDirectQuery xsi:nil=&quot;true&quot; /&gt;&lt;/Query&gt;&lt;/Items&gt;&lt;/Mashup&gt;</odc:PowerQueryMashupData>
+ </odc:OfficeDataConnection>
+</xml>
+<style>
+<!--
+    .ODCDataSource
+    {
+    behavior: url(dataconn.htc);
+    }
+-->
+</style>
+ 
+</head>
+
+<body onload='init()' scroll=no leftmargin=0 topmargin=0 rightmargin=0 style='border: 0px'>
+<table style='border: solid 1px threedface; height: 100%; width: 100%' cellpadding=0 cellspacing=0 width='100%'> 
+  <tr> 
+    <td id=tdName style='font-family:arial; font-size:medium; padding: 3px; background-color: threedface'> 
+      &nbsp; 
+    </td> 
+     <td id=tdTableDropdown style='padding: 3px; background-color: threedface; vertical-align: top; padding-bottom: 3px'>
+
+      &nbsp; 
+    </td> 
+  </tr> 
+  <tr> 
+    <td id=tdDesc colspan='2' style='border-bottom: 1px threedshadow solid; font-family: Arial; font-size: 1pt; padding: 2px; background-color: threedface'>
+
+      &nbsp; 
+    </td> 
+  </tr> 
+  <tr> 
+    <td colspan='2' style='height: 100%; padding-bottom: 4px; border-top: 1px threedhighlight solid;'> 
+      <div id='pt' style='height: 100%' class='ODCDataSource'></div> 
+    </td> 
+  </tr> 
+</table> 
+
+  
+<script language='javascript'> 
+
+function init() { 
+  var sName, sDescription; 
+  var i, j; 
+  
+  try { 
+    sName = unescape(location.href) 
+  
+    i = sName.lastIndexOf(".") 
+    if (i>=0) { sName = sName.substring(1, i); } 
+  
+    i = sName.lastIndexOf("/") 
+    if (i>=0) { sName = sName.substring(i+1, sName.length); } 
+
+    document.title = sName; 
+    document.getElementById("tdName").innerText = sName; 
+
+    sDescription = document.getElementById("docprops").innerHTML; 
+  
+    i = sDescription.indexOf("escription>") 
+    if (i>=0) { j = sDescription.indexOf("escription>", i + 11); } 
+
+    if (i>=0 && j >= 0) { 
+      j = sDescription.lastIndexOf("</", j); 
+
+      if (j>=0) { 
+          sDescription = sDescription.substring(i+11, j); 
+        if (sDescription != "") { 
+            document.getElementById("tdDesc").style.fontSize="x-small"; 
+          document.getElementById("tdDesc").innerHTML = sDescription; 
+          } 
+        } 
+      } 
+    } 
+  catch(e) { 
+
+    } 
+  } 
+</script> 
+
+</body> 
+ 
+</html>
