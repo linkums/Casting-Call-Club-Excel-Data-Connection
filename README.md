@@ -1,4 +1,4 @@
-# Casting-Call-Club-Excel-Data-Connection
+# Casting Call Club Excel Data Connection
 Connect Excel to any Casting Call Club user and use public APIs to fetch their audition submission details.
 <img width="1913" height="143" alt="image" src="https://github.com/user-attachments/assets/68f0e8df-0403-423a-afb4-49a9df586d33" />
 
